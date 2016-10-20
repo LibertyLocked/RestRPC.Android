@@ -1,0 +1,358 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RestRPC.Framework</name>
+    </assembly>
+    <members>
+        <member name="M:RestRPC.Framework.BuiltinPlugins.Echo.Respond(System.Object[])">
+            <summary>
+            Returns the input args concatenated as a string
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:RestRPC.Framework.BuiltinPlugins.PluginList">
+            <summary>
+            A built-in plugin of RestRPC
+            Handles "pluginlist" request and returns the list of plugins loaded
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.BuiltinPlugins.PluginList.Respond(System.Object[])">
+            <summary>
+            Gets the list of plugins loaded in the plugin manager
+            </summary>
+            <param name="args">Not used</param>
+            <returns>An array of ID strings of plugins loaded</returns>
+        </member>
+        <member name="T:RestRPC.Framework.ConnectionState">
+            <summary>
+            State of the socket connection in a component
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.ConnectionState.Disconnected">
+            <summary>
+            Socket is not connected
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.ConnectionState.Connecting">
+            <summary>
+            Socket is connecting to server
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.ConnectionState.Connected">
+            <summary>
+            Socket is connected to server
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.ConnectionState.Closing">
+            <summary>
+            Socket is closing
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Outputs.ChannelRequest">
+            <summary>
+            Sent by the component to request a channel for itself on the server. 
+            This tells the server the name of this component, as well as the maximum number of requests 
+            the component can handle per tick. 
+            Once the server receives this message, a channel will be created, registered under this component's name. 
+            Inputs sent by web clients will then be delivered to this component. 
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Outputs.SetCacheRequest">
+            <summary>
+            A request to the server to set an entry in the cache map. 
+            The server keeps a map (PluginID as key) of a map (Key as key) of data entries, 
+            i.e. map[string]map[string]interface{}
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Outputs.WebReturn">
+            <summary>
+            This message is sent to server as a response to a request
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Outputs.NoOutput">
+            <summary>
+            A null object. 
+            If this is returned by a request handler, nothing will be returned the the client.
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Outputs.WebOutput">
+            <summary>
+            This is the format for messages client is sending to the server
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Outputs.Pulse">
+            <summary>
+            A pulse packet can be sent by the RestRPC component every frame. 
+            Can be used to sync game updates.
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Inputs.WebInput">
+            <summary>
+            This is the format of messages client is receiving from the remote server
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.Header">
+            <summary>
+            Gets the header of the request. 
+            Header is currently unused
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.Cmd">
+            <summary>
+            Gets the command of the request. 
+            Cmd is the command this input request is calling. It is the ID of the plugin 
+            the request wants to call
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.Args">
+            <summary>
+            Gets the arguments in this request. 
+            Arguments supplied to the plugin
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.UID">
+            <summary>
+            Gets the UID of this request.
+            This is used to identify the requster. Each requester must have a unique ID
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.CID">
+            <summary>
+            Gets the CID of this request. Custom ID attached by the requester
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Plugins.Plugin">
+            <summary>
+            A plugin extends the request types RestRPC can handle
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Plugins.Plugin.PluginID">
+            <summary>
+            Gets the ID of the plugin
+            ID is used as "method" when calling this plugin's procedure
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.Plugin.Dispatch(System.String,System.Object[])">
+            <summary>
+            Dispatch another plugin loaded in Plugin Manager
+            </summary>
+            <param name="targetID">Callee's plugin ID</param>
+            <param name="args">Arguments passed with the call</param>
+            <returns>Object returned by the callee</returns>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.Plugin.SetCache(System.String,System.Object)">
+            <summary>
+            Requests the key-value pair be cached in this plugin's cache map, on the server
+            </summary>
+            <param name="key">Key of the entry in the cache map</param>
+            <param name="value">Value of the entry in the cache map</param>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.Plugin.Respond(System.Object[])">
+            <summary>
+            Respond to a call to this plugin's procedure
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:RestRPC.Framework.Plugins.PluginLoader">
+            <summary>
+            Plugin loader provides functionalities to load plugins from an external assembly
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.PluginLoader.LoadPluginsFromAssembly(System.String)">
+            <summary>
+            Get Plugin subclasses from an assembly and instantiate them
+            </summary>
+            <param name="fileName">Filename of the assembly containing plugins</param>
+            <returns>A list containing the plugin instances</returns>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.PluginLoader.LoadAllPluginsFromDir(System.String,System.String)">
+            <summary>
+            Loads all plugins from a directory, recursively
+            </summary>
+            <param name="dirName">The directory to search for plugins in</param>
+            <returns>The list of plugins found in the directory, all instantiated</returns>
+        </member>
+        <member name="T:RestRPC.Framework.Plugins.PluginManager">
+            <summary>
+            Plugin manager manages plugins which contains procedures that can be called
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Plugins.PluginManager.PluginIDs">
+            <summary>
+            Gets the IDs of plugins registered in this plugin manager
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.PluginManager.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.PluginManager.RegisterPlugin(RestRPC.Framework.Plugins.Plugin,System.String)">
+            <summary>
+            Registers a plugin
+            </summary>
+            <param name="plugin">The plugin to be registered</param>
+            <param name="key">ID of the procedure. Must be unique or register will fail</param>
+            <returns>True if plugin is successfully registered</returns>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.PluginManager.UnregisterPlugin(RestRPC.Framework.Plugins.Plugin)">
+            <summary>
+            Unregisters a plugin
+            </summary>
+            <param name="plugin">The plugin instance to be unregistered. It must be already registered</param>
+        </member>
+        <member name="T:RestRPC.Framework.Plugins.IUpdate">
+            <summary>
+            Implemented by plugins that need to be ticked every frame
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.IUpdate.Update">
+            <summary>
+            Runs an update cycle
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Plugins.Procedure">
+            <summary>
+            Respond to a remote procedure call
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:RestRPC.Framework.LogType">
+            <summary>
+            Type of a log message
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.LogType.None">
+            <summary>
+            No type
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.LogType.Info">
+            <summary>
+            An info message
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.LogType.Warning">
+            <summary>
+            A warning message
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.LogType.Error">
+            <summary>
+            An error message
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.LogType.Debug">
+            <summary>
+            A debug message
+            </summary>
+        </member>
+        <member name="F:RestRPC.Framework.LogType.All">
+            <summary>
+            All types of messages
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Logger">
+            <summary>
+            Logger writes logs to a TextWriter
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Logger.Writer">
+            <summary>
+            Gets the TextWriter logger is writing to
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Logger.LogLevel">
+            <summary>
+            Gets the log level
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.Logger.Log(System.Object,RestRPC.Framework.LogType,System.IO.TextWriter)">
+            <summary>
+            Writes a log message using a specified log writer. Default writer will not be used for this message.
+            </summary>
+            <param name="message"></param>
+            <param name="logType"></param>
+            <param name="textWriter"></param>
+        </member>
+        <member name="M:RestRPC.Framework.Logger.Log(System.Object,RestRPC.Framework.LogType)">
+            <summary>
+            Writes a log message using the default log writer
+            </summary>
+            <param name="message"></param>
+            <param name="logType"></param>
+        </member>
+        <member name="P:RestRPC.Framework.RestRPCComponent.Name">
+            <summary>
+            Gets the name of this RestRPC component
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.RestRPCComponent.RemoteUri">
+            <summary>
+            Gets information on the remote this component is connecting to
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.RestRPCComponent.PollingRate">
+            <summary>
+            Gets the rate the component polls messages from server
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.RestRPCComponent.IsRunning">
+            <summary>
+            Gets an indicator whether the component is running network updates.
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.RestRPCComponent.ConnectionState">
+            <summary>
+            Gets the state of WebSocket connection
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.RestRPCComponent.PluginManager">
+            <summary>
+            Gets the instance of PluginManager in this component
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.RestRPCComponent.#ctor(System.String,System.Uri,System.TimeSpan,System.String,System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="componentName">The name of this RestRPC component</param>
+            <param name="remoteUri">Remote server settings</param>
+            <param name="pollingRate">Rate to poll messages from server</param>
+            <param name="username">Username for HTTP auth</param>
+            <param name="password">Password for HTTP auth</param>
+        </member>
+        <member name="M:RestRPC.Framework.RestRPCComponent.#ctor(System.String,System.Uri,System.TimeSpan,System.String,System.String,System.IO.TextWriter,RestRPC.Framework.LogType)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="componentName">The name of this RestRPC component</param>
+            <param name="remoteUri">Remote server settings</param>
+            <param name="pollingRate">Rate to poll messages from server</param>
+            <param name="username">Username for HTTP auth</param>
+            <param name="password">Password for HTTP auth</param>
+            <param name="logWriter">Log writer</param>
+            <param name="logLevel">Level of logging</param>
+        </member>
+        <member name="M:RestRPC.Framework.RestRPCComponent.Start">
+            <summary>
+            Starts connection to the remote server. 
+            The component will always attempt to reconnect if disconnected while it is running
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.RestRPCComponent.Stop">
+            <summary>
+            Stops connection to the remote server. 
+            All unprocessed inputs and unsent outputs will be discarded
+            </summary>
+        </member>
+        <member name="M:RestRPC.Framework.RestRPCComponent.Update">
+            <summary>
+            Updates RestRPCComponent. Should be called on every tick.
+            </summary>
+        </member>
+    </members>
+</doc>
