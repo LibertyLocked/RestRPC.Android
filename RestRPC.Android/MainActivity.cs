@@ -48,7 +48,7 @@ namespace RestRPC.Android
             string password = txtPassword.Text;
 
             component = new RestRPCComponent(name, serverUri, TimeSpan.FromMilliseconds(100), username, password);
-            component.PluginManager.RegisterPlugin(new RestRPC.Android.Plugins.WifiUtils(), "wifi");
+            component.PluginManager.RegisterPlugin("wifi", new RestRPC.Android.Plugins.WifiUtils());
             component.Start();
 
             Thread updateThread = new Thread(Update_ThreadProc);

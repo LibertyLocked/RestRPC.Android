@@ -60,9 +60,7 @@
         </member>
         <member name="T:RestRPC.Framework.Messages.Outputs.SetCacheRequest">
             <summary>
-            A request to the server to set an entry in the cache map. 
-            The server keeps a map (PluginID as key) of a map (Key as key) of data entries, 
-            i.e. map[string]map[string]interface{}
+            A request to the server to set an entry in the cache map
             </summary>
         </member>
         <member name="T:RestRPC.Framework.Messages.Outputs.WebReturn">
@@ -79,12 +77,6 @@
         <member name="T:RestRPC.Framework.Messages.Outputs.WebOutput">
             <summary>
             This is the format for messages client is sending to the server
-            </summary>
-        </member>
-        <member name="T:RestRPC.Framework.Messages.Outputs.Pulse">
-            <summary>
-            A pulse packet can be sent by the RestRPC component every frame. 
-            Can be used to sync game updates.
             </summary>
         </member>
         <member name="T:RestRPC.Framework.Messages.Inputs.WebInput">
@@ -127,12 +119,6 @@
             A plugin extends the request types RestRPC can handle
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.Plugins.Plugin.PluginID">
-            <summary>
-            Gets the ID of the plugin
-            ID is used as "method" when calling this plugin's procedure
-            </summary>
-        </member>
         <member name="M:RestRPC.Framework.Plugins.Plugin.Dispatch(System.String,System.Object[])">
             <summary>
             Dispatch another plugin loaded in Plugin Manager
@@ -172,6 +158,7 @@
             Loads all plugins from a directory, recursively
             </summary>
             <param name="dirName">The directory to search for plugins in</param>
+            <param name="pattern">Search pattern. e.g. "*.dll" for dll files</param>
             <returns>The list of plugins found in the directory, all instantiated</returns>
         </member>
         <member name="T:RestRPC.Framework.Plugins.PluginManager">
@@ -179,9 +166,14 @@
             Plugin manager manages plugins which contains procedures that can be called
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.Plugins.PluginManager.PluginIDs">
+        <member name="P:RestRPC.Framework.Plugins.PluginManager.ProcedureIDs">
             <summary>
-            Gets the IDs of plugins registered in this plugin manager
+            Gets the ID of procedures registered in this plugin manager
+            </summary>
+        </member>
+        <member name="P:RestRPC.Framework.Plugins.PluginManager.TickablePlugins">
+            <summary>
+            Gets a list of tickable plugins registered within the plugin manager
             </summary>
         </member>
         <member name="M:RestRPC.Framework.Plugins.PluginManager.#ctor">
@@ -189,19 +181,34 @@
             Constructor
             </summary>
         </member>
-        <member name="M:RestRPC.Framework.Plugins.PluginManager.RegisterPlugin(RestRPC.Framework.Plugins.Plugin,System.String)">
+        <member name="M:RestRPC.Framework.Plugins.PluginManager.RegisterPlugin(System.String,RestRPC.Framework.Plugins.Plugin)">
             <summary>
-            Registers a plugin
+            Registers a plugin. If plugin is tickable, it's also added to the tickable list
             </summary>
+            <param name="procedureID">ID of the procedure. Must be unique or register will fail</param>
             <param name="plugin">The plugin to be registered</param>
-            <param name="key">ID of the procedure. Must be unique or register will fail</param>
             <returns>True if plugin is successfully registered</returns>
         </member>
         <member name="M:RestRPC.Framework.Plugins.PluginManager.UnregisterPlugin(RestRPC.Framework.Plugins.Plugin)">
             <summary>
-            Unregisters a plugin
+            Unregisters the plugin's procedure and removes it from being ticked if tickable
             </summary>
             <param name="plugin">The plugin instance to be unregistered. It must be already registered</param>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.PluginManager.RegisterProcedure(System.String,RestRPC.Framework.Plugins.Procedure)">
+            <summary>
+            Registers a procedure
+            </summary>
+            <param name="procedureID">ID of the procedure</param>
+            <param name="procedure"></param>
+            <returns></returns>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.PluginManager.UnregisterProcedure(System.String)">
+            <summary>
+            Unregisters a procedure 
+            If this is used to unregister a tickable plugin's procedure, the plugin itself will not be unticked
+            </summary>
+            <param name="procedureID"></param>
         </member>
         <member name="T:RestRPC.Framework.Plugins.IUpdate">
             <summary>
@@ -284,6 +291,11 @@
             </summary>
             <param name="message"></param>
             <param name="logType"></param>
+        </member>
+        <member name="T:RestRPC.Framework.RestRPCComponent">
+            <summary>
+            RestRPCComponent communicates with an RRPC server and handles in/out messages
+            </summary>
         </member>
         <member name="P:RestRPC.Framework.RestRPCComponent.Name">
             <summary>
