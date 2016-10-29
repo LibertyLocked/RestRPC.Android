@@ -1,75 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="25px"
+    android:minHeight="25px"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/linearLayout1">
-    <TextView
-        android:text=" Server URI"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView1"
-        android:gravity="center" />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtServer"
-        android:background="@android:drawable/editbox_background"
-        android:textColor="@android:color/black"
-        android:inputType="textFilter" />
-    <TextView
-        android:text="Service Name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:gravity="center" />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtName"
-        android:background="@android:drawable/editbox_background"
-        android:textColor="@android:color/black"
-        android:inputType="textFilter" />
-    <TextView
-        android:text="Credentials"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:gravity="center" />
+    android:layout_height="wrap_content"
+    android:id="@+id/scrollView1">
     <LinearLayout
-        android:orientation="horizontal"
-        android:minWidth="25px"
-        android:minHeight="25px"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout2"
-        android:weightSum="2">
+        android:layout_height="match_parent"
+        android:id="@+id/linearLayout1">
+        <TextView
+            android:text="RRPC Server"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView1"
+            android:gravity="center" />
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/txtUsername"
-            android:layout_weight="1"
-            android:hint="Username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtServer"
+            android:background="@android:drawable/editbox_background"
+            android:textColor="@android:color/black"
             android:inputType="textFilter" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout2"
+            android:weightSum="2">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txtUsername"
+                android:layout_weight="1"
+                android:hint="Username"
+                android:inputType="textFilter" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/txtPassword"
+                android:layout_weight="1"
+                android:password="true"
+                android:hint="Password" />
+        </LinearLayout>
+        <TextView
+            android:text="Service Name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:gravity="center" />
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/txtPassword"
-            android:layout_weight="1"
-            android:password="true"
-            android:hint="Password" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtName"
+            android:background="@android:drawable/editbox_background"
+            android:textColor="@android:color/black"
+            android:inputType="textFilter" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout3"
+            android:weightSum="2">
+            <Button
+                android:text="Save"
+                android:id="@+id/btnSave"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+            <Button
+                android:text="Connect"
+                android:id="@+id/btnConnect"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout4">
+            <Button
+                android:text="Clear"
+                android:id="@+id/btnClearLog"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:minHeight="0dp" />
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/lblConnStatus"
+                android:text="Connection State"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="right" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblLog"
+            android:maxLines="12"
+            android:minLines="12"
+            android:scrollbars="vertical"
+            android:background="@android:color/black"
+            android:textColor="@android:color/white" />
     </LinearLayout>
-    <Button
-        android:text="Save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnSave" />
-    <Button
-        android:text="Connect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnConnect" />
-</LinearLayout>
+</ScrollView>

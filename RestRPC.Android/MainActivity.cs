@@ -1,21 +1,26 @@
-﻿using System;
-using System.Threading;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
+using Android.OS;
+using Android.Preferences;
 using Android.Runtime;
+using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
-using Android.OS;
+using RestRPC.Android.Plugins;
 using RestRPC.Framework;
-using Android.Preferences;
+using System;
+using System.Threading;
 
 namespace RestRPC.Android
 {
-    [Activity(Label = "RestRPC.Android", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "RestRPC Android Service", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         RrpcComponent component;
         EditText txtServer, txtName, txtUsername, txtPassword;
+        TextView lblStatus, lblLog;
+        Button btnConnect, btnSave, btnClearLog;
+        TextViewWriter logWriter;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -26,6 +31,14 @@ namespace RestRPC.Android
             txtName = FindViewById<EditText>(Resource.Id.txtName);
             txtUsername = FindViewById<EditText>(Resource.Id.txtUsername);
             txtPassword = FindViewById<EditText>(Resource.Id.txtPassword);
+            lblStatus = FindViewById<TextView>(Resource.Id.lblConnStatus);
+            lblLog = FindViewById<TextView>(Resource.Id.lblLog);
+            btnConnect = FindViewById<Button>(Resource.Id.btnConnect);
+            btnSave = FindViewById<Button>(Resource.Id.btnSave);
+            btnClearLog = FindViewById<Button>(Resource.Id.btnClearLog);
+
+            lblLog.MovementMethod = new ScrollingMovementMethod();
+            logWriter = new TextViewWriter(lblLog, RunOnUiThread);
 
             // Load saved preferences
             txtServer.Text = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext).GetString("Server", "");
@@ -33,11 +46,9 @@ namespace RestRPC.Android
             txtUsername.Text = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext).GetString("Username", "");
             txtPassword.Text = PreferenceManager.GetDefaultSharedPreferences(ApplicationContext).GetString("Password", "");
 
-            var btnConnect = FindViewById<Button>(Resource.Id.btnConnect);
             btnConnect.Click += btnConnect_OnClick;
-
-            var btnSave = FindViewById<Button>(Resource.Id.btnSave);
             btnSave.Click += btnSave_OnClick;
+            btnClearLog.Click += btnClearLog_OnClick;
         }
 
         private void btnConnect_OnClick(object sender, EventArgs e)
@@ -47,14 +58,15 @@ namespace RestRPC.Android
             string username = txtUsername.Text;
             string password = txtPassword.Text;
 
-            component = new RrpcComponent(name, serverUri, TimeSpan.FromMilliseconds(1000), username, password);
-            component.PluginManager.RegisterPlugin("wifi", new RestRPC.Android.Plugins.WifiUtils());
+            component = new RrpcComponent(name, serverUri, TimeSpan.FromMilliseconds(1000), username, password, logWriter, LogType.All);
+            component.PluginManager.RegisterPlugin("wifi", new WifiUtils());
             component.Start();
 
             Thread updateThread = new Thread(Update_ThreadProc);
             updateThread.Start();
 
-            FindViewById<Button>(Resource.Id.btnConnect).Enabled = false;
+            // Disable connect button
+            btnConnect.Enabled = false;
         }
 
         private void btnSave_OnClick(object sender, EventArgs e)
@@ -64,18 +76,34 @@ namespace RestRPC.Android
             editor.PutString("Name", txtName.Text);
             editor.PutString("Username", txtUsername.Text);
             editor.PutString("Password", txtPassword.Text);
-            Toast.MakeText(ApplicationContext, "saved", ToastLength.Long).Show();
+            Toast.MakeText(ApplicationContext, "Settings saved", ToastLength.Long).Show();
             editor.Commit();
+        }
+
+        private void btnClearLog_OnClick(object sender, EventArgs e)
+        {
+            lblLog.Text = "";
         }
 
         private void Update_ThreadProc()
         {
             while (true)
             {
-                component.Update();
+                // Run all the updates on the UI thread.
+                // In a game, RRPC service must be updated on the game's main update thread
+                RunOnUiThread(() => 
+                {
+                    component.Update();
+                    UpdateStatusUI();
+                });
                 // TODO: Use a timer instead of thread sleep
-                Thread.Sleep(50);
+                Thread.Sleep(100);
             }
+        }
+
+        private void UpdateStatusUI()
+        {
+            lblStatus.Text = component.ConnectionState.ToString();
         }
     }
 }
