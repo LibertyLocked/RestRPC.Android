@@ -49,69 +49,9 @@
             Socket is closing
             </summary>
         </member>
-        <member name="T:RestRPC.Framework.Messages.Outputs.ChannelRequest">
-            <summary>
-            Sent by the component to request a channel for itself on the server. 
-            This tells the server the name of this component, as well as the maximum number of requests 
-            the component can handle per tick. 
-            Once the server receives this message, a channel will be created, registered under this component's name. 
-            Inputs sent by web clients will then be delivered to this component. 
-            </summary>
-        </member>
-        <member name="T:RestRPC.Framework.Messages.Outputs.SetCacheRequest">
-            <summary>
-            A request to the server to set an entry in the cache map
-            </summary>
-        </member>
-        <member name="T:RestRPC.Framework.Messages.Outputs.WebReturn">
+        <member name="T:RestRPC.Framework.Messages.Outputs.RrpcResponse">
             <summary>
             This message is sent to server as a response to a request
-            </summary>
-        </member>
-        <member name="T:RestRPC.Framework.Messages.Outputs.NoOutput">
-            <summary>
-            A null object. 
-            If this is returned by a request handler, nothing will be returned the the client.
-            </summary>
-        </member>
-        <member name="T:RestRPC.Framework.Messages.Outputs.WebOutput">
-            <summary>
-            This is the format for messages client is sending to the server
-            </summary>
-        </member>
-        <member name="T:RestRPC.Framework.Messages.Inputs.WebInput">
-            <summary>
-            This is the format of messages client is receiving from the remote server
-            </summary>
-        </member>
-        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.Header">
-            <summary>
-            Gets the header of the request. 
-            Header is currently unused
-            </summary>
-        </member>
-        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.Cmd">
-            <summary>
-            Gets the command of the request. 
-            Cmd is the command this input request is calling. It is the ID of the plugin 
-            the request wants to call
-            </summary>
-        </member>
-        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.Args">
-            <summary>
-            Gets the arguments in this request. 
-            Arguments supplied to the plugin
-            </summary>
-        </member>
-        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.UID">
-            <summary>
-            Gets the UID of this request.
-            This is used to identify the requster. Each requester must have a unique ID
-            </summary>
-        </member>
-        <member name="P:RestRPC.Framework.Messages.Inputs.WebInput.CID">
-            <summary>
-            Gets the CID of this request. Custom ID attached by the requester
             </summary>
         </member>
         <member name="T:RestRPC.Framework.Plugins.Plugin">
@@ -292,42 +232,42 @@
             <param name="message"></param>
             <param name="logType"></param>
         </member>
-        <member name="T:RestRPC.Framework.RestRPCComponent">
+        <member name="T:RestRPC.Framework.RrpcComponent">
             <summary>
             RestRPCComponent communicates with an RRPC server and handles in/out messages
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.RestRPCComponent.Name">
+        <member name="P:RestRPC.Framework.RrpcComponent.Name">
             <summary>
             Gets the name of this RestRPC component
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.RestRPCComponent.RemoteUri">
+        <member name="P:RestRPC.Framework.RrpcComponent.RemoteUri">
             <summary>
             Gets information on the remote this component is connecting to
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.RestRPCComponent.PollingRate">
+        <member name="P:RestRPC.Framework.RrpcComponent.PollingRate">
             <summary>
             Gets the rate the component polls messages from server
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.RestRPCComponent.IsRunning">
+        <member name="P:RestRPC.Framework.RrpcComponent.IsRunning">
             <summary>
             Gets an indicator whether the component is running network updates.
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.RestRPCComponent.ConnectionState">
+        <member name="P:RestRPC.Framework.RrpcComponent.ConnectionState">
             <summary>
             Gets the state of WebSocket connection
             </summary>
         </member>
-        <member name="P:RestRPC.Framework.RestRPCComponent.PluginManager">
+        <member name="P:RestRPC.Framework.RrpcComponent.PluginManager">
             <summary>
             Gets the instance of PluginManager in this component
             </summary>
         </member>
-        <member name="M:RestRPC.Framework.RestRPCComponent.#ctor(System.String,System.Uri,System.TimeSpan,System.String,System.String)">
+        <member name="M:RestRPC.Framework.RrpcComponent.#ctor(System.String,System.Uri,System.TimeSpan,System.String,System.String)">
             <summary>
             Constructor
             </summary>
@@ -337,7 +277,7 @@
             <param name="username">Username for HTTP auth</param>
             <param name="password">Password for HTTP auth</param>
         </member>
-        <member name="M:RestRPC.Framework.RestRPCComponent.#ctor(System.String,System.Uri,System.TimeSpan,System.String,System.String,System.IO.TextWriter,RestRPC.Framework.LogType)">
+        <member name="M:RestRPC.Framework.RrpcComponent.#ctor(System.String,System.Uri,System.TimeSpan,System.String,System.String,System.IO.TextWriter,RestRPC.Framework.LogType)">
             <summary>
             Constructor
             </summary>
@@ -349,19 +289,19 @@
             <param name="logWriter">Log writer</param>
             <param name="logLevel">Level of logging</param>
         </member>
-        <member name="M:RestRPC.Framework.RestRPCComponent.Start">
+        <member name="M:RestRPC.Framework.RrpcComponent.Start">
             <summary>
             Starts connection to the remote server. 
             The component will always attempt to reconnect if disconnected while it is running
             </summary>
         </member>
-        <member name="M:RestRPC.Framework.RestRPCComponent.Stop">
+        <member name="M:RestRPC.Framework.RrpcComponent.Stop">
             <summary>
             Stops connection to the remote server. 
             All unprocessed inputs and unsent outputs will be discarded
             </summary>
         </member>
-        <member name="M:RestRPC.Framework.RestRPCComponent.Update">
+        <member name="M:RestRPC.Framework.RrpcComponent.Update">
             <summary>
             Updates RestRPCComponent. Should be called on every tick.
             </summary>

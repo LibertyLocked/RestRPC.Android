@@ -14,7 +14,7 @@ namespace RestRPC.Android
     [Activity(Label = "RestRPC.Android", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
-        RestRPCComponent component;
+        RrpcComponent component;
         EditText txtServer, txtName, txtUsername, txtPassword;
 
         protected override void OnCreate(Bundle bundle)
@@ -47,7 +47,7 @@ namespace RestRPC.Android
             string username = txtUsername.Text;
             string password = txtPassword.Text;
 
-            component = new RestRPCComponent(name, serverUri, TimeSpan.FromMilliseconds(100), username, password);
+            component = new RrpcComponent(name, serverUri, TimeSpan.FromMilliseconds(1000), username, password);
             component.PluginManager.RegisterPlugin("wifi", new RestRPC.Android.Plugins.WifiUtils());
             component.Start();
 
@@ -74,7 +74,7 @@ namespace RestRPC.Android
             {
                 component.Update();
                 // TODO: Use a timer instead of thread sleep
-                Thread.Sleep(20);
+                Thread.Sleep(50);
             }
         }
     }
