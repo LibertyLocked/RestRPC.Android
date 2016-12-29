@@ -49,7 +49,13 @@
             Socket is closing
             </summary>
         </member>
-        <member name="T:RestRPC.Framework.Messages.Outputs.RrpcResponse">
+        <member name="T:RestRPC.Framework.Messages.Outputs.CacheUpdateMessage">
+            <summary>
+            This message is sent to the server as a request to update this service's cache space. 
+            The header for this message is "c"
+            </summary>
+        </member>
+        <member name="T:RestRPC.Framework.Messages.Outputs.RpcResponseMessage">
             <summary>
             This message is sent to server as a response to a request
             </summary>
@@ -58,6 +64,14 @@
             <summary>
             A plugin extends the request types RestRPC can handle
             </summary>
+        </member>
+        <member name="M:RestRPC.Framework.Plugins.Plugin.RunOnUpdateThread(System.Action)">
+            <summary>
+            Schedule a task to be run on the Update thread. 
+            This ensures the action will be run when component updates
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
         </member>
         <member name="M:RestRPC.Framework.Plugins.Plugin.Dispatch(System.String,System.Object[])">
             <summary>
@@ -116,7 +130,7 @@
             Gets a list of tickable plugins registered within the plugin manager
             </summary>
         </member>
-        <member name="M:RestRPC.Framework.Plugins.PluginManager.#ctor">
+        <member name="M:RestRPC.Framework.Plugins.PluginManager.#ctor(RestRPC.Framework.RrpcComponent)">
             <summary>
             Constructor
             </summary>
@@ -305,6 +319,13 @@
             <summary>
             Updates RestRPCComponent. Should be called on every tick.
             </summary>
+        </member>
+        <member name="M:RestRPC.Framework.RrpcComponent.RunOnUpdateThread(System.Action)">
+            <summary>
+            Schedules a task to be run during Update
+            </summary>
+            <param name="action"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
